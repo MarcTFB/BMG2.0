@@ -26,9 +26,9 @@
     }
     
     switch($uc){
-        case 'gererGenres' : include 'controleurs/gererGenres.php'; break;
-        case 'gererAuteurs' : include 'controleurs/gererAuteurs.php'; break;
-        case 'gererOuvrages' : include 'controleurs/gererOuvrage.php'; break;
+        case 'gererGenres' : include 'controleurs/c_gererGenres.php'; break;
+        case 'gererAuteurs' : include 'controleurs/c_gererAuteurs.php'; break;
+        case 'gererOuvrages' : include 'controleurs/c_gererOuvrage.php'; break;
         default : include 'vues/_v_home.php';
     }
 
