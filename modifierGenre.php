@@ -9,7 +9,6 @@
     session_start();
     // inclure les bibliothèques de fonctions
     require_once 'include/_config.inc.php';
-    require_once 'include/_data.lib.php';
 ?>
 
 <!DOCTYPE html>

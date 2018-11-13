@@ -31,7 +31,28 @@ switch($action){
     break;
 
     case 'consulterGenre' : {
-            
+            // récuperation du code passé dans l'URL
+        if (isset($_GET["id"])){
+            $strCode = strtoupper(htmlentities($_GET["id"]));
+            // appel de la méthode du modèle
+            $leGenre = GenreDal::loadGenreByID($strCode);
+            if($leGenre == NULL){
+                $tabErreur[] = 'Ce genre n\'existe pas !';
+                $hasErrors = true;
+            }
+        }
+        else {
+            // ^pas d'id dans l'url ni clic sur Valider : c'est Anormal
+            $tabErreur[] = "Aucun genre n'a été transmis pour consultation !";
+            $hasErrors = true;
+        }
+        
+        if ($hasErrors){
+            include 'vues/_v_afficherErreurs.php';
+        }
+        else{
+            include 'vues/v_consulterGenre.php';
+        }
     }
     break;
 
@@ -84,8 +105,10 @@ switch($action){
                         $msg = 'Le genre'
                                 .$strCode.'-'
                                 .$strLibelle.'a été ajouté';
+                        $leGenre = GenreDal::loadGenreByID($strCode);
                         include 'vues/_v_afficherMessage.php';
-                        //include 'vues/v_consulterGenre.php';
+                        $leGenre = new Genre($strCode, $strLibelle);
+                        include 'vues/v_consulterGenre.php';
                     }
                     else {
                         $tabErreur[] = 'Une erreur s\'est produite dans l\'operation d\'ajout!';
@@ -96,7 +119,6 @@ switch($action){
                         $msg = "L'opération d'ajout n'a pas pu être menée à terme en raison des erreurs suivantes :";
                         $lien = '<a href="index.php?uc=gererGenres&action=ajouterGenre">Retour à la saisie</a>';
                         include 'vues/_v_afficherErreurs.php';
-
                     }
                 }
             } break;
@@ -105,6 +127,7 @@ switch($action){
     }
     break;
 
+  
     case 'modifierGenre' : {
             
     }
