@@ -18,7 +18,7 @@
     include("vues/_v_header.php");
     include("vues/_v_menu.php");
     
-    if(isset($uc)){
+    if(isset($_REQUEST['uc'])){
         $uc = $_REQUEST['uc'];
     }
     else{
@@ -28,7 +28,7 @@
     switch($uc){
         case 'gererGenres' : include 'controleurs/c_gererGenres.php'; break;
         case 'gererAuteurs' : include 'controleurs/c_gererAuteurs.php'; break;
-        case 'gererOuvrages' : include 'controleurs/c_gererOuvrage.php'; break;
+        case 'gererOuvrages' : include 'controleurs/c_gererOuvrages.php'; break;
         default : include 'vues/_v_home.php';
     }
 
