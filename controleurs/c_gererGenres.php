@@ -37,13 +37,13 @@ switch($action){
             // appel de la méthode du modèle
             $leGenre = GenreDal::loadGenreByID($strCode);
             if($leGenre == NULL){
-                $tabErreur[] = 'Ce genre n\'existe pas !';
+                $tabErreurs[] = 'Ce genre n\'existe pas !';
                 $hasErrors = true;
             }
         }
         else {
             // ^pas d'id dans l'url ni clic sur Valider : c'est Anormal
-            $tabErreur[] = "Aucun genre n'a été transmis pour consultation !";
+            $tabErreurs[] = "Aucun genre n'a été transmis pour consultation !";
             $hasErrors = true;
         }
         
@@ -111,7 +111,7 @@ switch($action){
                         include 'vues/v_consulterGenre.php';
                     }
                     else {
-                        $tabErreur[] = 'Une erreur s\'est produite dans l\'operation d\'ajout!';
+                        $tabErreurs[] = 'Une erreur s\'est produite dans l\'operation d\'ajout!';
                         $hasErrors = true;
                         }
                     }
@@ -129,12 +129,122 @@ switch($action){
 
   
     case 'modifierGenre' : {
-            
+        // initialisation des variables
+        $tabErreurs = array();
+        $hasErrors = false;
+        $strLibelle = '';
+        // creer l'objet Genre
+        if (isset($_REQUEST["id"])){
+            $strCode = strtoupper(htmlentities($_REQUEST["id"]));
+            // appel de la méthode du modèle
+            $leGenre = GenreDal::loadGenreByID($strCode);
+            if($leGenre == NULL){
+                $tabErreurs[] = 'Ce genre n\'existe pas !';
+                $hasErrors = true;
+            }
+        }
+        else {
+            // pas d'id dans l'url ni clic sur Valider : c'est Anormal
+            $tabErreurs[] = "Aucun genre n'a été transmis pour validation !";
+            $hasErrors = true;
+        }
+        //traitement de l'option : saisie ou validation ?
+        if (isset($_GET["option"])) {
+            $option = htmlentities($_GET["option"]);
+        } else {
+            $option = 'saisirGenre';
+        }
+        switch ($option){
+            case'saisirGenre' : {           
+                if(!$hasErrors){
+                    // affichage de la vue de modification
+                    // l'objet Genre $leGenre est connu
+                    include ("vues/v_modifierGenre.php");
+                } else {
+                    $msg = "L'opération de modification n'a pas pu être mené";
+                    include 'vues/_v_afficherErreurs.php';
+                }  
+            } break;
+            case'validerGenre' : { 
+                if(!$hasErrors){
+                    if(isset($_POST["cmdValider"])){
+                        if (!empty($_POST["txtLibelle"])) {
+                            $strLibelle = ucfirst(htmlentities($_POST["txtLibelle"]));
+                        }
+                        else {
+                           $tabErreurs[] = "Le libelle doit être renseigné !";
+                           $hasErrors = true;
+                        }
+                        if (!$hasErrors) {
+                            // mise à jour de la base données 
+                            $leGenre->setLibelle($strLibelle);
+                            $res = GenreDal::setGenre($leGenre);
+                            if($res > 0) {
+                                $msg = 'Le genre '
+                                        .$leGenre->getCode().'-'
+                                        .$leGenre->getLibelle().'a été ajouté';
+                                include 'vues/_v_afficherMessage.php';
+                                include 'vues/v_consulterGenre.php';
+                            } else {
+                                $tabErreurs[] = "Une erreur s'est produit dans l'opération de modification";
+                                $hasErrors = true;
+                            }
+                        }
+                    }
+                }
+                if($hasErrors){
+                    $msg = "L'opération de modification n'a pas pu être menée à terme";
+                    include 'vues/_v_afficherErreurs.php';
+                }
+            }
+        } 
+        break;
     }
     break;
 
     case 'supprimerGenre' : {
-            
+    if (isset($_GET["id"])){
+            $strCode = strtoupper(htmlentities($_GET["id"]));
+            // appel de la méthode du modèle
+            $leGenre = GenreDal::loadGenreByID($strCode);
+            if($leGenre == NULL){
+                $tabErreurs[] = 'Ce genre n\'existe pas !';
+                $hasErrors = true;
+            }
+            else {
+                // recherche des ouvrages de ce genre
+                if (GenreDal::countOuvragesGenre($leGenre->getCode()) > 0){
+                $tabErreurs[] = "Il existe des ouvrages qui référencent ce genre, suppression impossible !";
+                $hasErrors = true;
+                }
+            }
+        }
+        else {
+            // pas d'id dans l'url ni clic sur Valider : c'est anormal
+            $tabErreurs[] = "Aucun genre n'a été transmis pour la suppression !";
+            $hasErrors = true;
+        }
+        if (!$hasErrors){
+            $res = GenreDal::delGenre($leGenre->getCode()); // $res contient le nombre de lignes
+            if ($res > 0){
+                $msg = 'Le genre '
+                        . $leGenre->getCode() . 'a été supprimé';
+                include 'vues/_v_afficherMessage.php';
+                // affichage de la liste des genres
+                $lesGenres = GenreDal::loadGenres(1);
+                // afficher le nombre de genres
+                $nbGenres = count($lesGenres);
+                include 'vues/v_listerGenres.php';
+            } else {
+                $tabErreurs[] = "Une erreur s\'est produite dans l\'opération de suppression !";
+                $hasErrors = true;
+            }
+        }
+        if ($hasErrors){
+            $msg = "L'opération de suppression n'a pas pu être menée à terme en raison des erreurs suivantes :";
+            $lien = '<a href="index.php?uc=gererGenres">Retour à la saisie</a>';
+            include 'vues/_v_afficherErreurs.php';
+        }   
     }
     break;
 
