@@ -7,10 +7,9 @@
   * @package default
  */
 
-    session_start();
+
     // inclure les bibliothèques de fonctions
     require_once 'include/_config.inc.php';
-    require_once 'include/_data.lib.php';
 ?>
         <div id="content">
             <h2>Gestion des auteurs</h2>
@@ -33,7 +32,8 @@
                             echo '<tr><th>ID</th><th>Nom</th></tr>';
                             // affichage des lignes du tableau
                             $n = 0;
-                            while ($ligne = $lesAuteurs->fetch())  {
+
+                            foreach ($lesAuteurs as $unAuteur)  {
                                 if (($n % 2) == 1) {
                                     echo '<tr class="impair">';
                                 }
@@ -42,9 +42,9 @@
                                 }
                                 // afficher la colonne 1 dans un hyperlien
                                 echo '<td><a href="afficherAuteur.php?id='
-                                    .$ligne[0].'">'.$ligne[0].'</a></td>';
+                                    .$unAuteur->getId().'">'.$unAuteur->getId().'</a></td>';
                                 // afficher les colonnes suivantes
-                                echo '<td>'.$ligne[1].'</td>';
+                                echo '<td>'.$unAuteur->getNom().'</td>';
                                 echo '</tr>';
                                 $n++;
                             }

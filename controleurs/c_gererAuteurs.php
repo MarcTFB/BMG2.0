@@ -2,7 +2,7 @@
 require_once 'modele/AuteurDal.class.php';
 require_once 'include/_reference.lib.php';
 
-if(!isser($_REQUEST["action"])){
+if(!isset($_REQUEST["action"])){
     $action = "listerAuteurs";
 }
 else{
@@ -28,9 +28,9 @@ $strNotes = '' ;
 
 switch($action){
     case 'listerAuteurs' : {
-        $lesAuteurs = AuteurDal::loadGenres(1);
+        $lesAuteurs = AuteurDal::loadAuteurs(1);
         $nbAuteurs = count($lesAuteurs);
-        include("Vues/v_listerAuteurs.php");
+        include("vues/v_listerAuteurs.php");
     }
     break;
 
