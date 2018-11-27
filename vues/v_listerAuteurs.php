@@ -11,16 +11,6 @@
     require_once 'include/_config.inc.php';
     require_once 'include/_data.lib.php';
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>BMG - Bibliothèque municipale de Groville</title>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" type="text/css" href="styles/screen.css" />
-    </head>
-    <body>
-        <?php include("include/header.php") ; ?>
-        <?php include("include/menu.php") ; ?>
         <div id="content">
             <h2>Gestion des auteurs</h2>
             <a href="ajouterAuteur.php" title="Ajouter">
@@ -32,14 +22,6 @@
                     <legend>Auteurs</legend>
                     <div id="object-list">
                         <?php
-                        $cnx = connectDB();
-                        // récupérer les auteurs
-                        $strSQL = "SELECT id_auteur as ID, "
-                            ." nom AS Nom "
-                            ."FROM v_auteurs ";
-                        $lesAuteurs = getRows($cnx, $strSQL);
-                        // afficher le nombre de auteurs      
-                        $nbAuteurs = $lesAuteurs->rowCount();
                         echo '<span>'.$nbAuteurs.' auteur(s) trouvé(s)'
                                 . '</span><br /><br />';
                         // afficher un tableau des auteurs
@@ -69,14 +51,9 @@
                         }
                         else {			
                             echo "Aucun auteur trouvé !";
-                        }		
-                        $lesAuteurs->closeCursor();
-                        disconnectDB($cnx);
+                        }
                         ?>
                     </div>
                 </fieldset>
             </div>
         </div>          
-        <?php include("include/footer.php") ; ?>
-    </body>
-</html>
