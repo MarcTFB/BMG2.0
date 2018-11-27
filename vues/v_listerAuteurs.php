@@ -1,8 +1,9 @@
+
 <?php
-/** 
+/**
  * Page de gestion des auteurs
 
-  * @author 
+  * @author
   * @package default
  */
 
@@ -18,7 +19,7 @@
             </a>
             <div class="corps-form">
                 <!--- afficher la liste des auteurs -->
-                <fieldset>	
+                <fieldset>
                     <legend>Auteurs</legend>
                     <div id="object-list">
                         <?php
@@ -28,11 +29,11 @@
                         if ($nbAuteurs > 0) {
                             // création du tableau
                             echo '<table>';
-                            // affichage de l'entete du tableau 
+                            // affichage de l'entete du tableau
                             echo '<tr><th>ID</th><th>Nom</th></tr>';
                             // affichage des lignes du tableau
                             $n = 0;
-                            while ($ligne = $lesAuteurs->fetch())  {                                                            
+                            while ($ligne = $lesAuteurs->fetch())  {
                                 if (($n % 2) == 1) {
                                     echo '<tr class="impair">';
                                 }
@@ -49,11 +50,10 @@
                             }
                             echo '</table>';
                         }
-                        else {			
+                        else {
                             echo "Aucun auteur trouvé !";
                         }
                         ?>
                     </div>
                 </fieldset>
             </div>
-        </div>          
