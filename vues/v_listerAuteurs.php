@@ -13,7 +13,7 @@
 ?>
         <div id="content">
             <h2>Gestion des auteurs</h2>
-            <a href="ajouterAuteur.php" title="Ajouter">
+            <a href="index.php?uc=gererAuteurs&action=ajouterAuteur" title="Ajouter">
                 Ajouter un auteur
             </a>
             <div class="corps-form">
@@ -41,10 +41,14 @@
                                     echo '<tr class="pair">';
                                 }
                                 // afficher la colonne 1 dans un hyperlien
-                                echo '<td><a href="afficherAuteur.php?id='
+                                echo '<td><a href="index.php?uc=gererAuteurs&action=consulterAuteur&id='
                                     .$unAuteur->getId().'">'.$unAuteur->getId().'</a></td>';
                                 // afficher les colonnes suivantes
-                                echo '<td>'.$unAuteur->getNom().'</td>';
+                                echo '<td>'.$unAuteur->getNom().' '.$unAuteur->getPrenom();
+                                    if($unAuteur->getAlias() != NULL){
+                                        echo " (".$unAuteur->getAlias().")";
+                                    }
+                                    echo '</td>';
                                 echo '</tr>';
                                 $n++;
                             }
